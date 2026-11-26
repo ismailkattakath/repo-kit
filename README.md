@@ -34,8 +34,9 @@ git add -A && nix run .#write-files
 ```
 
 `init` copies the template (flake, `.gitignore`, the shared CI caller, Dependabot config)
-and fills its four required fields. Each is a `throw` in the template, so a plain
-`nix flake init -t github:ismailkattakath/repo-kit` fails until you set them by hand.
+and fills its required fields, the ones the header of `template/flake.nix` lists. Each
+`throw` there stops a plain `nix flake init -t github:ismailkattakath/repo-kit` until you
+set it by hand.
 In the fleet, `kattakath/.github`'s `scripts/new-repo.sh` does all of this plus the
 GitHub side.
 
