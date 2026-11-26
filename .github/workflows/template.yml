@@ -1,0 +1,54 @@
+name: template
+
+# Instantiates the template exactly as kattakath/.github's new-repo.sh does (the `init` app),
+# against THIS checkout of the kit, then proves a new repo starts in shape: unfilled it
+# fails by name, before write-files its drift checks fail, after write-files it is green.
+# Nothing else instantiates the template, so without this it could rot unnoticed.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: template-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  instantiate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: DeterminateSystems/determinate-nix-action@16f94ba7aae399b9f9077c254b6719ec6de7e3e3 # v3.24.2
+      - name: init, write-files, flake check
+        run: |
+          set -euo pipefail
+          kit="path:$GITHUB_WORKSPACE"
+          git config --global user.email ci@example.invalid
+          git config --global user.name ci
+          probe="$(mktemp -d)"
+          cd "$probe"
+          git init -q -b main
+          cp -R "$GITHUB_WORKSPACE/template/." .
+          git add -A
+          if nix flake check --override-input repo-kit "$kit" 2>err.log; then
+            echo "::error::an unfilled template evaluated"; exit 1
+          fi
+          grep -q 'repo-kit template: set repoKit' err.log || { cat err.log; echo "::error::unfilled template failed without naming the field"; exit 1; }
+          cd "$(mktemp -d)"
+          git init -q -b main
+          nix run "$GITHUB_WORKSPACE#init" -- template-probe 2026 "CI" "Template probe"
+          git add -A
+          if nix flake check --override-input repo-kit "$kit" >/dev/null 2>&1; then
+            echo "::error::drift checks passed before write-files"; exit 1
+          fi
+          nix run --override-input repo-kit "$kit" .#write-files
+          git add -A
+          nix flake check --override-input repo-kit "$kit" --print-build-logs
+          echo "the template instantiates in shape"

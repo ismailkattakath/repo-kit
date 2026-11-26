@@ -1,4 +1,8 @@
 {
+  # REQUIRED before first use: the three `throw`s below and this description. Each throw
+  # stops evaluation with its message, so a forgotten field can never generate (and
+  # drift-check green) a LICENSE for a placeholder holder. kattakath/.github's
+  # scripts/new-repo.sh fills all four.
   description = "One line: what this repository is";
 
   inputs = {
@@ -14,11 +18,11 @@
       imports = [ repo-kit.flakeModules.default ];
 
       repoKit = {
-        name = "my-repo";
+        name = throw "repo-kit template: set repoKit.name to the repository name (kebab-case)";
         license = {
           spdx = "MIT";
-          year = "2026";
-          holder = "Your Name";
+          year = throw "repo-kit template: set repoKit.license.year (the copyright year)";
+          holder = throw "repo-kit template: set repoKit.license.holder (the copyright holder)";
         };
       };
 

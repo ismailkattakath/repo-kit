@@ -60,6 +60,22 @@
         perSystem =
           { pkgs, ... }:
           {
+            # `nix run github:ismailkattakath/repo-kit#init -- NAME YEAR HOLDER DESCRIPTION`:
+            # copies the template into the current (empty) directory and fills its four
+            # required fields. The ONE implementation of the fill: kattakath/.github's
+            # new-repo.sh calls it, and this repo's CI instantiates the template with it.
+            apps.init.program = pkgs.writeShellApplication {
+              name = "repo-kit-init";
+              runtimeInputs = [ pkgs.python3 ];
+              text = ''
+                [ $# -eq 4 ] || { echo "usage: init NAME YEAR HOLDER DESCRIPTION" >&2; exit 2; }
+                [ -e flake.nix ] && { echo "error: ./flake.nix exists; run init in an empty repository" >&2; exit 1; }
+                cp -R ${./template}/. .
+                chmod -R u+w .
+                python3 -I ${./scripts/fill-template.py} flake.nix "$@"
+              '';
+            };
+
             repoKit = {
               devPackages = [
                 pkgs.git

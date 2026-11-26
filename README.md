@@ -25,12 +25,18 @@ The design decision, with the alternatives that lost, is
 
 ## Install
 
-Start a new repository from the template:
+Start a new repository from the template, in an empty git repository:
 
 ```sh
-nix flake init -t github:ismailkattakath/repo-kit
-nix run .#write-files
+nix run github:ismailkattakath/repo-kit#init -- my-repo 2026 "Your Name" "One line: what it is"
+git add -A && nix run .#write-files
 ```
+
+`init` copies the template (flake, `.gitignore`, the shared CI caller, Dependabot config)
+and fills its four required fields. Each is a `throw` in the template, so a plain
+`nix flake init -t github:ismailkattakath/repo-kit` fails until you set them by hand.
+In the fleet, `kattakath/.github`'s `scripts/new-repo.sh` does all of this plus the
+GitHub side.
 
 Or add it to an existing flake-parts flake:
 
