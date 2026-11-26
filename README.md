@@ -68,7 +68,7 @@ Generated files, each switched by an option:
 |---|---|---|
 | `LICENSE` | `repoKit.license.spdx` (`MIT`, `CC-BY-4.0`, or `null`) | SPDX licence text |
 | `.envrc` | `repoKit.envrc.enable` | `.envrc.local` (if present), then `use flake`, then `.env` |
-| `.editorconfig` | `repoKit.editorconfig.enable` | one editor baseline |
+| `.editorconfig` | `repoKit.editorconfig.enable`, `.settings` | one editor baseline; `settings` adds or overrides sections (home-manager's `editorconfig.settings` shape) |
 | `.devcontainer/devcontainer.json` | `repoKit.devcontainer.enable` | the fleet's shared, public image (`:1`) |
 | `.github/` community files | `repoKit.community.enable` (off by default; set `owner` and `conductContact`) | Code of Conduct (Contributor Covenant 3.0), CONTRIBUTING, SECURITY, SUPPORT, issue forms and `config.yml`, PR template |
 
