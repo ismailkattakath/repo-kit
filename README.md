@@ -1,7 +1,8 @@
 # repo-kit
 
 [![ci: build status on main](https://github.com/ismailkattakath/repo-kit/actions/workflows/ci.yml/badge.svg?branch=main&event=push)](https://github.com/ismailkattakath/repo-kit/actions/workflows/ci.yml)
-[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![template: a new repository from the template passes its checks](https://github.com/ismailkattakath/repo-kit/actions/workflows/template.yml/badge.svg?branch=main&event=push)](https://github.com/ismailkattakath/repo-kit/actions/workflows/template.yml)
+[![license: from the repository's LICENSE file](https://img.shields.io/github/license/ismailkattakath/repo-kit)](LICENSE)
 [![built with Nix](https://img.shields.io/badge/built%20with-Nix-5277C3?logo=nixos&logoColor=white)](https://nixos.org)
 
 One repository shape for a Nix fleet: a shared devShell, formatting and checks, plus generated files that cannot drift.
@@ -68,20 +69,9 @@ flake-parts. The kit does not force its own nixpkgs on a consumer.
 | `nix run .#write-files` | write every generated file to its path |
 | `nix flake check` | `toolchain-complete`, `treefmt`, and one `files:<path>` check per generated file |
 
-Generated files, each switched by an option:
-
-| File | Option | Content |
-|---|---|---|
-| `LICENSE` | `repoKit.license.spdx` (`MIT`, `CC-BY-4.0`, or `null`) | SPDX licence text |
-| `.envrc` | `repoKit.envrc.enable` | `.envrc.local` (if present), then `use flake`, then `.env` |
-| `.editorconfig` | `repoKit.editorconfig.enable`, `.settings` | one editor baseline; `settings` adds or overrides sections (home-manager's `editorconfig.settings` shape) |
-| `.devcontainer/devcontainer.json` | `repoKit.devcontainer.enable` | the fleet's shared, public image (`:1`) |
-| `.github/` community files | `repoKit.community.enable` (off by default; set `owner` and `conductContact`) | Code of Conduct (Contributor Covenant 3.0), CONTRIBUTING, SECURITY, SUPPORT, issue forms and `config.yml`, PR template |
-
-Turn `community` on **only in an owner's public `.github` repository**. GitHub serves those
-files as defaults to every public repository of that owner that has no copy of its own, so
-one text covers the whole owner. A local copy anywhere else would shadow the default.
-
+Each generated file (`LICENSE`, `.envrc`, `.editorconfig`, the devcontainer and the
+community files) is switched by its own option: see
+[docs/reference/generated-files.md](docs/reference/generated-files.md).
 Edit the options, never the generated files: `nix flake check` fails when a file differs
 from what the kit generates.
 
