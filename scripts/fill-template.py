@@ -33,4 +33,14 @@ for pattern, replacement in subs:
     if n != 1:
         sys.exit(f"error: {pattern!r} matched {n} times in {path}")
 flake.write_text(text)
+
+# The README stub beside the flake (template/README.md): its title and summary line.
+readme = flake.with_name("README.md")
+if readme.exists():
+    body = readme.read_text()
+    for token, value in (("@NAME@", name), ("@DESCRIPTION@", description)):
+        if body.count(token) != 1:
+            sys.exit(f"error: {token} occurs {body.count(token)} times in {readme}")
+        body = body.replace(token, value)
+    readme.write_text(body)
 print(f"filled {path}: {name} ({year}, {holder})")
