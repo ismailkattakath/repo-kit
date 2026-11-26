@@ -70,6 +70,11 @@ Generated files, each switched by an option:
 | `.envrc` | `repoKit.envrc.enable` | `.envrc.local` (if present), then `use flake`, then `.env` |
 | `.editorconfig` | `repoKit.editorconfig.enable` | one editor baseline |
 | `.devcontainer/devcontainer.json` | `repoKit.devcontainer.enable` | the fleet's shared, public image (`:1`) |
+| `.github/` community files | `repoKit.community.enable` (off by default; set `owner` and `conductContact`) | Code of Conduct (Contributor Covenant 3.0), CONTRIBUTING, SECURITY, SUPPORT, issue forms and `config.yml`, PR template |
+
+Turn `community` on **only in an owner's public `.github` repository**. GitHub serves those
+files as defaults to every public repository of that owner that has no copy of its own, so
+one text covers the whole owner. A local copy anywhere else would shadow the default.
 
 Edit the options, never the generated files: `nix flake check` fails when a file differs
 from what the kit generates.

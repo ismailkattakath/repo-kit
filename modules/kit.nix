@@ -21,6 +21,45 @@ let
     else
       raw;
 
+  # Community health files (ADR-016 § 3), for an owner's `.github` repository only: GitHub
+  # serves them as defaults to every public repo of the owner without its own copy. ONE
+  # text, two knobs (the owner, for absolute links; the CoC contact).
+  community =
+    let
+      fill =
+        builtins.replaceStrings
+          [ "@OWNER@" "@CONTACT@" ]
+          [ cfg.community.owner cfg.community.conductContact ];
+      read = name: fill (builtins.readFile (../community + "/${name}"));
+      # Contributor Covenant 3.0, vendored verbatim (EthicalSource/contributor_covenant @
+      # 8d00b918, content/version/3/0/code_of_conduct.md, front matter removed): its two
+      # placeholders are replaced here, so the vendored file stays diffable against upstream.
+      reportingNote = "**[NOTE: describe your means of reporting here.]**";
+      enforcementNote = "**[NOTE: The remedies and repairs outlined below are suggestions based on best practices in code of conduct enforcement. If your community has its own established enforcement process, be sure to edit this section to describe your own policies.]**\n\n";
+      coc =
+        builtins.replaceStrings
+          [ reportingNote enforcementNote ]
+          [
+            "email the maintainer at <${cfg.community.conductContact}>. Only the maintainer reads these reports, and they are kept confidential."
+            ""
+          ]
+          (builtins.readFile ../community/contributor-covenant-3.0.md);
+    in
+    assert lib.assertMsg (
+      !lib.hasInfix "[NOTE:" coc
+    ) "repo-kit: an upstream Contributor Covenant placeholder survived; update the replacements";
+    {
+      ".github/CODE_OF_CONDUCT.md".text = coc;
+      ".github/CONTRIBUTING.md".text = read "CONTRIBUTING.md";
+      ".github/SECURITY.md".text = read "SECURITY.md";
+      ".github/SUPPORT.md".text = read "SUPPORT.md";
+      ".github/pull_request_template.md".text = read "pull_request_template.md";
+      ".github/ISSUE_TEMPLATE/config.yml".text = read "ISSUE_TEMPLATE/config.yml";
+      ".github/ISSUE_TEMPLATE/bug_report.yml".text = read "ISSUE_TEMPLATE/bug_report.yml";
+      ".github/ISSUE_TEMPLATE/feature_request.yml".text = read "ISSUE_TEMPLATE/feature_request.yml";
+      ".github/ISSUE_TEMPLATE/question.yml".text = read "ISSUE_TEMPLATE/question.yml";
+    };
+
   # kattakath/nix-config ADR-015: the fleet's shared, public devcontainer image.
   devcontainer = {
     inherit (cfg) name;
@@ -65,8 +104,9 @@ in
 
   options.repoKit = {
     name = mkOption {
-      type = types.strMatching "[a-z0-9][a-z0-9._-]*";
-      description = "The repository name (kebab-case). The devcontainer workspace is /workspaces/<name>.";
+      # `.github` is the one dotted name: an owner's community-defaults repository.
+      type = types.strMatching ''\.github|[a-z0-9][a-z0-9._-]*'';
+      description = "The repository name (kebab-case, or `.github`). The devcontainer workspace is /workspaces/<name>.";
     };
     license = {
       spdx = mkOption {
@@ -97,6 +137,21 @@ in
       type = types.bool;
       default = true;
       description = "Generate .editorconfig.";
+    };
+    community = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Generate the owner-wide community health files (CODE_OF_CONDUCT, CONTRIBUTING, SECURITY, SUPPORT, issue forms, PR template) under .github/. Only for an owner's public `.github` repository: a local copy in any other repo shadows the owner default.";
+      };
+      owner = mkOption {
+        type = types.strMatching "[A-Za-z0-9-]+";
+        description = "The GitHub owner (user or org) whose `.github` repository this is; used for absolute links.";
+      };
+      conductContact = mkOption {
+        type = types.str;
+        description = "Where Code of Conduct reports go (an email address), published in CODE_OF_CONDUCT.md.";
+      };
     };
     devcontainer = {
       enable = mkOption {
@@ -218,6 +273,7 @@ in
                 trim_trailing_whitespace = false
               '';
             })
+            (lib.mkIf cfg.community.enable community)
             (lib.mkIf cfg.devcontainer.enable {
               ".devcontainer/devcontainer.json".source =
                 (pkgs.formats.json { }).generate "devcontainer.json"

@@ -1,0 +1,22 @@
+name: Question
+description: Ask how to use something. Check the README first.
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+  - type: textarea
+    id: tried
+    attributes:
+      label: What you have tried
+      description: Commands, configuration, or documentation you have already looked at.
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      options:
+        - label: I agree to follow the [Code of Conduct](https://github.com/@OWNER@/.github/blob/main/.github/CODE_OF_CONDUCT.md).
+          required: true
