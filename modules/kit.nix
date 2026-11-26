@@ -69,10 +69,15 @@ let
     # `-C /`: git must not inspect the workspace first, or a git worktree (whose .git points at
     # a host path absent in the container) fails the command itself.
     postStartCommand = "git -C / config --global --add safe.directory \${containerWorkspaceFolder}";
+    # Trust THIS workspace's .envrc once, at create (the image bakes direnv + nix-direnv and
+    # no whitelist): a nested clone or any other .envrc still asks.
+    postCreateCommand = "direnv allow \${containerWorkspaceFolder}";
     customizations.vscode = {
       extensions = cfg.devcontainer.extensions;
       settings = {
-        "terminal.integrated.defaultProfile.linux" = "nix develop";
+        # Plain bash: the image's direnv hook loads the devShell from .envrc (cached by
+        # nix-direnv), the same environment the direnv extension gives tasks and tools.
+        "terminal.integrated.defaultProfile.linux" = "bash";
         "terminal.integrated.profiles.linux" = {
           bash.path = "bash";
           "nix develop" = {
