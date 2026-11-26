@@ -1,6 +1,7 @@
-"""Fill the template flake's four required fields: fill-template.py FLAKE NAME YEAR HOLDER DESCRIPTION.
+"""Fill the template flake's required fields: fill-template.py FLAKE NAME YEAR HOLDER DESCRIPTION.
 
-Each field is a `throw` in template/flake.nix, so an unfilled one fails evaluation by name.
+The header of template/flake.nix lists them. Each `throw` there fails evaluation by name
+when left unfilled; the description is a plain placeholder string.
 Every substitution must match exactly once, or this exits non-zero without writing.
 """
 

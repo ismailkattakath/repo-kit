@@ -1,8 +1,8 @@
 {
-  # REQUIRED before first use: the three `throw`s below and this description. Each throw
+  # REQUIRED before first use: the `throw`s below and this description. Each throw
   # stops evaluation with its message, so a forgotten field can never generate (and
   # drift-check green) a LICENSE for a placeholder holder. kattakath/.github's
-  # scripts/new-repo.sh fills all four.
+  # scripts/new-repo.sh fills every one of them.
   description = "One line: what this repository is";
 
   inputs = {
