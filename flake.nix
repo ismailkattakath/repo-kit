@@ -21,9 +21,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Only its flake-parts module is imported, so its own flake inputs and nixConfig
-    # (pipe-operators, abort-on-warn) never reach a consumer's lock.
+    # (pipe-operators, abort-on-warn) never reach a consumer's lock. THIRD-PARTY: pinned to
+    # a reviewed rev (ADR-016 § 4), bumped by PR, never moved by a bare `nix flake update`.
     files = {
-      url = "github:mightyiam/files";
+      url = "github:mightyiam/files/3c14e6fc4450ffa0ea73ef1ac1613cdc7c5e9d50";
       flake = false;
     };
   };

@@ -177,6 +177,9 @@ in
         treefmt = {
           projectRootFile = "flake.nix";
           programs.nixfmt.enable = lib.mkDefault true;
+          # Generated files belong to their `files:` drift checks; a formatter rewriting one
+          # would fight them.
+          settings.global.excludes = builtins.attrNames config.files.file;
         };
 
         files = {

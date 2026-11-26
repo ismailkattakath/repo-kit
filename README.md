@@ -50,6 +50,9 @@ Or add it to an existing flake-parts flake:
 }
 ```
 
+Keep both `follows` lines: they are what gives the whole fleet one nixpkgs and one
+flake-parts. The kit does not force its own nixpkgs on a consumer.
+
 ## Usage
 
 | Command | What it does |
