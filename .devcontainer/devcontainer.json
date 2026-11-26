@@ -1,0 +1,38 @@
+{
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "nix develop",
+        "terminal.integrated.profiles.linux": {
+          "bash": {
+            "path": "bash"
+          },
+          "claude": {
+            "args": [
+              "-lc",
+              "exec nix develop github:kattakath/nix-config#fleet -c claude"
+            ],
+            "icon": "claude",
+            "path": "bash"
+          },
+          "nix develop": {
+            "args": [
+              "-lc",
+              "exec nix develop"
+            ],
+            "icon": "beaker",
+            "path": "bash"
+          }
+        }
+      }
+    }
+  },
+  "image": "ghcr.io/kattakath/devcontainer:1",
+  "name": "repo-kit",
+  "postStartCommand": "git -C / config --global --add safe.directory ${containerWorkspaceFolder}",
+  "workspaceFolder": "/workspaces/repo-kit",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/repo-kit,type=bind"
+}
