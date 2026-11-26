@@ -64,7 +64,7 @@ Generated files, each switched by an option:
 | File | Option | Content |
 |---|---|---|
 | `LICENSE` | `repoKit.license.spdx` (`MIT`, `CC-BY-4.0`, or `null`) | SPDX licence text |
-| `.envrc` | `repoKit.envrc.enable` | `use flake`, plus `.env` and `.envrc.local` when present |
+| `.envrc` | `repoKit.envrc.enable` | `.envrc.local` (if present), then `use flake`, then `.env` |
 | `.editorconfig` | `repoKit.editorconfig.enable` | one editor baseline |
 | `.devcontainer/devcontainer.json` | `repoKit.devcontainer.enable` | the fleet's shared, public image (`:1`) |
 
