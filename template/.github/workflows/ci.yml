@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   flake-check:
-    uses: kattakath/.github/.github/workflows/nix-flake-check.yml@cad98392a903fd89ec732ea116f38ec871e38ac0 # main
+    uses: kattakath/.github/.github/workflows/nix-flake-check.yml@90aa18fe95a8bf0e84dc373f78f1fc03eb21c0ea # v1.0.1
 
   gate:
     if: ${{ !cancelled() }}
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 2
     steps:
-      - uses: kattakath/.github/actions/gate@cad98392a903fd89ec732ea116f38ec871e38ac0 # main
+      - uses: kattakath/.github/actions/gate@90aa18fe95a8bf0e84dc373f78f1fc03eb21c0ea # v1.0.1
         with:
           needs: ${{ toJSON(needs) }}
           expect: '{"flake-check": true}'

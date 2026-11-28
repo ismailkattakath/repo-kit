@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 2
     steps:
-      - uses: kattakath/.github/actions/gate@1d485b208f64f14ffd52923e877c8a9c2521c4bb
+      - uses: kattakath/.github/actions/gate@90aa18fe95a8bf0e84dc373f78f1fc03eb21c0ea # v1.0.1
         with:
           needs: ${{ toJSON(needs) }}
           expect: '{"gitleaks": true, "flake-check": true}'
@@ -45,4 +45,4 @@ jobs:
   # (kattakath/.github nix-flake-check.yml): the devShell's toolchain, treefmt and each
   # generated file's drift check (files:<path>).
   flake-check:
-    uses: kattakath/.github/.github/workflows/nix-flake-check.yml@cad98392a903fd89ec732ea116f38ec871e38ac0 # main
+    uses: kattakath/.github/.github/workflows/nix-flake-check.yml@90aa18fe95a8bf0e84dc373f78f1fc03eb21c0ea # v1.0.1
