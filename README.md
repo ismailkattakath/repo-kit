@@ -33,7 +33,7 @@ nix run github:ismailkattakath/repo-kit#init -- my-repo 2026 "Your Name" "One li
 git add -A && nix run .#write-files
 ```
 
-`init` copies the template (flake, `.gitignore`, the shared CI caller, Dependabot config)
+`init` copies the template (flake, `.gitignore`, the shared CI caller)
 and fills its required fields, the ones the header of `template/flake.nix` lists. Each
 `throw` there stops a plain `nix flake init -t github:ismailkattakath/repo-kit` until you
 set it by hand.
@@ -70,8 +70,8 @@ flake-parts. The kit does not force its own nixpkgs on a consumer.
 | `nix run .#write-files` | write every generated file to its path |
 | `nix flake check` | `toolchain-complete`, `treefmt`, and one `files:<path>` check per generated file |
 
-Each generated file (`LICENSE`, `.envrc`, `.editorconfig`, the devcontainer and the
-community files) is switched by its own option: see
+Each generated file (`LICENSE`, `.envrc`, `.editorconfig`, the devcontainer, the
+Dependabot config and the community files) is switched by its own option: see
 [docs/reference/generated-files.md](docs/reference/generated-files.md).
 Edit the options, never the generated files: `nix flake check` fails when a file differs
 from what the kit generates.

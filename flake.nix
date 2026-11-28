@@ -3,7 +3,8 @@
 # A consumer imports `flakeModules.default` and gets, from ONE source:
 #   - a devShell and a `toolchain-complete` check from one package list
 #   - treefmt (`nix fmt`) and its formatting check
-#   - generated per-repo files (LICENSE, .envrc, .editorconfig, devcontainer.json),
+#   - generated per-repo files (LICENSE, .envrc, .editorconfig, devcontainer.json,
+#     .github/dependabot.yml),
 #     each with a drift check, written by `nix run .#write-files`
 #   - one nixpkgs, via `inputs.nixpkgs.follows = "repo-kit/nixpkgs"`
 # This flake consumes its own module: its LICENSE, .envrc and friends are generated too.
