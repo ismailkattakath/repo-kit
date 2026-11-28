@@ -24,6 +24,9 @@
           year = throw "repo-kit template: set repoKit.license.year (the copyright year)";
           holder = throw "repo-kit template: set repoKit.license.holder (the copyright holder)";
         };
+        # Opt-in in the kit, on for every new repository. Add ecosystems or directories through
+        # repoKit.dependabot's other options BEFORE `nix run .#write-files`.
+        dependabot.enable = true;
       };
 
       perSystem =

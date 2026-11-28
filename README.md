@@ -73,6 +73,9 @@ flake-parts. The kit does not force its own nixpkgs on a consumer.
 Each generated file (`LICENSE`, `.envrc`, `.editorconfig`, the devcontainer, the
 Dependabot config and the community files) is switched by its own option: see
 [docs/reference/generated-files.md](docs/reference/generated-files.md).
+The Dependabot config is opt-in for an existing repository (the template turns it on). Set
+its options **before** `write-files`; a repository without the module can render the same file
+with `repo-kit.lib.dependabot`.
 Edit the options, never the generated files: `nix flake check` fails when a file differs
 from what the kit generates.
 
