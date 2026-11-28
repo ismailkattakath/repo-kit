@@ -20,7 +20,7 @@ permissions:
 jobs:
   arm:
     if: ${{ vars.CI_BOT_CLIENT_ID != '' }}
-    uses: kattakath/.github/.github/workflows/arm-dependabot.yml@90aa18fe95a8bf0e84dc373f78f1fc03eb21c0ea # v1.0.1
+    uses: kattakath/.github/.github/workflows/arm-dependabot.yml@a605631adbddd3bc935eda81ff2107f3616b40c6 # v1.0.2
     with:
       client-id: ${{ vars.CI_BOT_CLIENT_ID }}
     secrets:
